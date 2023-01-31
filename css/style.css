@@ -253,3 +253,8 @@ iframe {
 .count_text {
   font-size: 18px;
 }
+
+.time__seconds, .time__minutes {
+  display: inline-block;
+  width: 150px;
+}
