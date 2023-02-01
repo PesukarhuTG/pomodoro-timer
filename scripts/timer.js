@@ -1,6 +1,7 @@
 import { addZero } from "./addZero.js";
 import message from "./message.js";
 import { state } from "./state.js";
+import { changeActiveBtn } from "./controls.js";
 
 const minElem = document.querySelector('.time__minutes');
 const secElem = document.querySelector('.time__seconds');
@@ -20,5 +21,23 @@ export const startTimer = () => {
 
   if (state.timeLeft <= 0) {
     message();
+    console.log(state.activeTodo);
+
+    if (state.statusApp === 'work') {
+      state.activeTodo.pomodoro += 1;
+
+        if (state.activeTodo.pomodoro % state.count) {
+          state.statusApp = 'break';
+        } else {
+          state.statusApp = 'relax';
+        }
+    } else {
+      state.statusApp = 'work';
+    }
+
+    state.timeLeft = state[state.statusApp] * 60; // change timer according status
+    console.log(state.activeTodo);
+    changeActiveBtn(state.statusApp);
+    startTimer();
   }
 };

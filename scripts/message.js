@@ -1,7 +1,13 @@
-const audio = new Audio('audio/san-andreas.mp3');
+import { state } from "./state.js";
+
+const audio = {
+  work: new Audio('audio/sound-01.wav'),
+  break: new Audio('audio/sound-02.wav'),
+  relax: new Audio('audio/sound-03.wav'),
+}
 
 const message = () => {
-  audio.play();
+  audio[state.statusApp].play();
 };
 
 export default message;
