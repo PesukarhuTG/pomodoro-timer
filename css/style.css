@@ -136,10 +136,17 @@ iframe {
 }
 
 .time {
+  display: grid;
+  grid-template-columns: 150px min-content 150px;
+  align-self: center;
   font-size: 120px;
   color: var(--primary);
   text-align: center;
   margin-bottom: 60px;
+}
+
+.time__seconds, .time__minutes {
+  display: block;
 }
 
 .title {
@@ -265,9 +272,4 @@ iframe {
 
 .count_text {
   font-size: 18px;
-}
-
-.time__seconds, .time__minutes {
-  display: inline-block;
-  width: 150px;
 }
