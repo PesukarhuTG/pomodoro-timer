@@ -5,12 +5,12 @@ import { state } from "./state.js";
 const minElem = document.querySelector('.time__minutes');
 const secElem = document.querySelector('.time__seconds');
 
-const showTimer = (seconds) => {
+export const showTimer = (seconds) => {
   minElem.textContent = addZero(Math.floor(seconds / 60));
   secElem.textContent = addZero(seconds % 60);
 };
 
-const startTimer = () => {
+export const startTimer = () => {
   state.timeLeft -= 1;
   showTimer(state.timeLeft);
 
@@ -22,5 +22,3 @@ const startTimer = () => {
     message();
   }
 };
-
-export default startTimer;

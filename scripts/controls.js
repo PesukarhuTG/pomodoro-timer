@@ -1,4 +1,4 @@
-import startTimer from "./timer.js";
+import { startTimer, showTimer } from "./timer.js";
 import { state } from "./state.js";
 
 const btnStart = document.querySelector('.control__btn_start');
@@ -18,8 +18,14 @@ const initControl = () => {
   });
 
   btnStop.addEventListener('click', () => {
-    console.log('stop');
+    clearTimeout(state.timerId);
+    state.isActive = false;
+    btnStart.textContent = 'Старт';
+    state.timeLeft = state[state.statusApp] * 60;
+    showTimer(state.timeLeft);
   });
+
+  showTimer(state.timeLeft);
 };
 
 export default initControl;
