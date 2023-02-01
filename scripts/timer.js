@@ -20,7 +20,7 @@ export const startTimer = () => {
   }
 
   if (state.timeLeft <= 0) {
-    message();
+    
     console.log(state.activeTodo);
 
     if (state.statusApp === 'work') {
@@ -34,6 +34,8 @@ export const startTimer = () => {
     } else {
       state.statusApp = 'work';
     }
+
+    message();
 
     state.timeLeft = state[state.statusApp] * 60; // change timer according status
     console.log(state.activeTodo);
