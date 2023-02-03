@@ -1,14 +1,9 @@
 import initControl from './controls.js';
-import { state } from "./state.js";
+import { initTodo } from './todo.js';
 
 const initApp = () => {
   initControl();
-
-  state.activeTodo = {
-    id: 'default',
-    pomodoro: 2,
-    title: 'Создать помодоро',
-  }
+  initTodo();
 };
 
 initApp();
