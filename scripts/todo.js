@@ -122,6 +122,8 @@ export const initTodo = () => {
       if (title) {
         const todo = addTodo(title);
         createTodoItem(todo);
+        state.activeTodo = todo;
+        showTodo();
       } else {
         alert('Введите корректные данные');
       }
