@@ -84,8 +84,13 @@ export const initTodo = () => {
   renderTodoList(todoList);
 
   todoAddBtn.addEventListener('click', () => {
-    const title = prompt('Введине название задачи');
-    const todo = addTodo(title);
-    createTodoItem(todo);
+    const title = prompt('Введине название задачи')?.trim();
+
+    if (title) {
+      const todo = addTodo(title);
+      createTodoItem(todo);
+    } else {
+      alert('Введите корректные данные');
+    }
   })
 };
