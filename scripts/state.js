@@ -1,6 +1,6 @@
 const WORK_TIME_MIN = 0.2;
-const BREAK_TIME_MIN = 0.2;
-const RELAX_TIME_MIN = 0.2;
+const BREAK_TIME_MIN = 0.1;
+const RELAX_TIME_MIN = 0.5;
 
 export const state = {
   work: WORK_TIME_MIN,
