@@ -184,6 +184,11 @@ iframe {
   padding-left: 30px;
 }
 
+.todo__subtitle {
+  padding-left: 30px;
+  padding-top: 10px;
+}
+
 .todo__list {
   padding-left: 24px;
 }

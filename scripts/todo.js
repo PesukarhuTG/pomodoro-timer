@@ -88,7 +88,13 @@ const renderTodoList = (list) => {
 export const initTodo = () => {
   const todoList = getTodo();
 
+  const subtitle = document.createElement('p');
+  subtitle.classList.add('todo__subtitle');
+  subtitle.textContent = 'Нет задач'; 
+
   if (!todoList.length) {
+    todoListElem.insertAdjacentElement('beforebegin', subtitle);
+
     state.activeTodo = [{
       id: 'default',
       pomodoro: 0,
@@ -124,6 +130,7 @@ export const initTodo = () => {
         createTodoItem(todo);
         state.activeTodo = todo;
         showTodo();
+        subtitle.remove();
       } else {
         alert('Введите корректные данные');
       }
