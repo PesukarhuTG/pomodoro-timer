@@ -35,30 +35,48 @@ const addTodo = (title) => {
   return todo;
 };
 
+// const createTodoItem = (item) => {
+//     if (item.id !== 'default') {
+//       const todoItem = document.createElement('li');
+//       todoItem.classList.add('todo__item');
+
+//       const todoItemWrapper = document.createElement('div');
+//       todoItemWrapper.classList.add('todo__item-wrapper');
+
+//       const todoBtn = document.createElement('button');
+//       todoBtn.classList.add('todo__btn');
+//       todoBtn.textContent = item.title;
+
+//       const editBtn = document.createElement('button');
+//       editBtn.classList.add('todo__edit');
+//       editBtn.ariaLabel = 'Редактировать';
+
+//       const delBtn = document.createElement('button');
+//       delBtn.classList.add('todo__del');
+//       delBtn.ariaLabel = 'Удалить';
+
+//       todoItemWrapper.append(todoBtn, editBtn, delBtn);
+//       todoItem.append(todoItemWrapper);
+//       todoListElem.prepend(todoItem);
+//     }
+// };
+
 const createTodoItem = (item) => {
-    if (item.id !== 'default') {
+  if (item.id !== 'default') {
       const todoItem = document.createElement('li');
       todoItem.classList.add('todo__item');
+      todoItem.dataset.id = item.id;
 
-      const todoItemWrapper = document.createElement('div');
-      todoItemWrapper.classList.add('todo__item-wrapper');
+      todoItem.innerHTML = `
+          <div class="todo__item-wrapper">
+            <button class="todo__btn">${item.title}</button>
+            <button class="todo__edit" aria-label="Редактировать"></button>
+            <button class="todo__del" aria-label="Удалить"></button>
+          </div>
+      `;
 
-      const todoBtn = document.createElement('button');
-      todoBtn.classList.add('todo__btn');
-      todoBtn.textContent = item.title;
-
-      const editBtn = document.createElement('button');
-      editBtn.classList.add('todo__edit');
-      editBtn.ariaLabel = 'Редактировать';
-
-      const delBtn = document.createElement('button');
-      delBtn.classList.add('todo__del');
-      delBtn.ariaLabel = 'Удалить';
-
-      todoItemWrapper.append(todoBtn, editBtn, delBtn);
-      todoItem.append(todoItemWrapper);
       todoListElem.prepend(todoItem);
-    }
+  }
 };
 
 const renderTodoList = (list) => {
@@ -82,6 +100,22 @@ export const initTodo = () => {
 
   showTodo();
   renderTodoList(todoList);
+
+  todoListElem.addEventListener('click', (e) => {
+    const target = e.target;
+
+    if (target.classList.value === 'todo__btn') {
+      console.log('активировать', target.closest('.todo__item').dataset.id);
+    }
+
+    if (target.classList.value === 'todo__edit') {
+      console.log('редактировать', target.closest('.todo__item').dataset.id);
+    }
+
+    if (target.classList.value === 'todo__del') {
+      console.log('удалить', target.closest('.todo__item').dataset.id);
+    }
+  });
 
   todoAddBtn.addEventListener('click', () => {
     const title = prompt('Введине название задачи')?.trim();
