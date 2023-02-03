@@ -115,16 +115,16 @@ export const initTodo = () => {
     if (target.classList.value === 'todo__del') {
       console.log('удалить', target.closest('.todo__item').dataset.id);
     }
-  });
 
-  todoAddBtn.addEventListener('click', () => {
-    const title = prompt('Введине название задачи')?.trim();
+    if (target.classList.value === 'todo__add') {
+      const title = prompt('Введине название задачи')?.trim();
 
-    if (title) {
-      const todo = addTodo(title);
-      createTodoItem(todo);
-    } else {
-      alert('Введите корректные данные');
+      if (title) {
+        const todo = addTodo(title);
+        createTodoItem(todo);
+      } else {
+        alert('Введите корректные данные');
+      }
     }
-  })
+  });
 };
