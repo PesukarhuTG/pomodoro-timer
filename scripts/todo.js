@@ -1,3 +1,4 @@
+import { changeActiveBtn, stop } from "./controls.js";
 import { state } from "./state.js";
 
 const titleElem = document.querySelector('.title');
@@ -16,9 +17,14 @@ const getTodo = () => {
   return todoList;
 };
 
-const showTodo = () => {
-  titleElem.textContent = state.activeTodo.title;
-  countPomodoro.textContent = state.activeTodo.pomodoro;
+export const showTodo = () => {
+  if (state.activeTodo) {
+    titleElem.textContent = state.activeTodo.title;
+    countPomodoro.textContent = state.activeTodo.pomodoro;
+  } else {
+    titleElem.textContent = '';
+    countPomodoro.textContent = 0;
+  }
 };
 
 const addTodo = (title) => {
@@ -33,6 +39,29 @@ const addTodo = (title) => {
   localStorage.setItem('pomodoro', JSON.stringify(todoList));
 
   return todo;
+};
+
+export const updateTodo = (todo) => {
+  const todoList = getTodo();
+  if (!todoList.length) {
+    return;
+  }
+
+  const todoItem = todoList.find((item) => item.id === todo.id);
+  todoItem.title = todo.title;
+  todoItem.pomodoro = todo.pomodoro;
+  localStorage.setItem('pomodoro', JSON.stringify(todoList));
+};
+
+const deleteTodo = (todo) => {
+  const todoList = getTodo();
+  const newTodoList = todoList.filter((item) => item.id !== todo.id);
+
+  if (todo.id === state.activeTodo.id) {
+    state.activeTodo = newTodoList[newTodoList.length - 1];
+  }
+
+  localStorage.setItem('pomodoro', JSON.stringify(newTodoList));
 };
 
 // const createTodoItem = (item) => {
@@ -58,6 +87,30 @@ const addTodo = (title) => {
 //       todoItemWrapper.append(todoBtn, editBtn, delBtn);
 //       todoItem.append(todoItemWrapper);
 //       todoListElem.prepend(todoItem);
+
+//       todoBtn.addEventListener('click', () => {
+//         state.activeTodo = item;
+//         showTodo();
+//         changeActiveBtn('work');
+//         stop();
+//       });
+
+//       editBtn.addEventListener('click', () => {
+//         item.title = prompt('Изменить название задачи:', item.title);
+//         todoBtn.textContent = item.title;
+
+//         if (item.id === state.activeTodo.id) {
+//           state.activeTodo.title = item.title;
+//         }
+//         showTodo();
+//         updateTodo(item);
+//       });
+
+//       delBtn.addEventListener('click', () => {
+//         deleteTodo(item);
+//         showTodo();
+//         todoItem.remove();
+//       });
 //     }
 // };
 
@@ -95,11 +148,11 @@ export const initTodo = () => {
   if (!todoList.length) {
     todoListElem.insertAdjacentElement('beforebegin', subtitle);
 
-    state.activeTodo = [{
+    state.activeTodo = {
       id: 'default',
       pomodoro: 0,
       title: 'Создать помодоро',
-    }];
+    };
   } else {
     state.activeTodo = todoList[todoList.length - 1];
   }
@@ -107,23 +160,62 @@ export const initTodo = () => {
   showTodo();
   renderTodoList(todoList);
 
+  // implement delegation instead of adding click on every button
   todoListElem.addEventListener('click', (e) => {
     const target = e.target;
 
-    if (target.classList.value === 'todo__btn') {
-      console.log('активировать', target.closest('.todo__item').dataset.id);
+    // make item active
+    if (target.closest('.todo__btn')) {
+      const listTodo = getTodo();
+      if (!listTodo.length) {
+        return;
+      }
+
+      const todo = listTodo.find(item => item.id === target.closest('.todo__item').dataset.id);
+
+      state.activeTodo = todo;
+      showTodo();
+      changeActiveBtn('work');
+      stop();
     }
 
-    if (target.classList.value === 'todo__edit') {
-      console.log('редактировать', target.closest('.todo__item').dataset.id);
+    // edit todo item
+    if (target.closest('.todo__edit')) {
+        const listTodo = getTodo();
+        if (!listTodo.length) {
+          return;
+        }
+        const todo = listTodo.find(item => item.id === target.closest('.todo__item').dataset.id);
+        
+        const title = prompt('Изменить название задачи на:', todo.title);
+        todo.title = title;
+        target.previousElementSibling.textContent = title;
+
+        if (todo.id === state.activeTodo.id) {
+                state.activeTodo.title = todo.title;
+        }
+
+        showTodo();
+
+        localStorage.setItem('pomodoro', JSON.stringify(listTodo));
     }
 
-    if (target.classList.value === 'todo__del') {
-      console.log('удалить', target.closest('.todo__item').dataset.id);
+    // delete item
+    if (target.closest('.todo__del')) {
+      const listTodo = getTodo();
+      if (!listTodo.length) {
+        return;
+      }
+      const todo = listTodo.find(item => item.id === target.closest('.todo__item').dataset.id);
+
+      deleteTodo(todo);
+      showTodo();
+      target.closest('.todo__item').remove();
     }
 
-    if (target.classList.value === 'todo__add') {
-      const title = prompt('Введине название задачи')?.trim();
+    // add item
+    if (target.closest('.todo__add')) {
+      const title = prompt('Введите название задачи', 'Название задачи')?.trim();
 
       if (title) {
         const todo = addTodo(title);
